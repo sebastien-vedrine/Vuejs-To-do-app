@@ -1,7 +1,9 @@
 <template>
   <div>
     <ToolBar/>
-    <nuxt/>
+    <section class="container">
+      <nuxt/>
+    </section>
     <Footer/>
   </div>
 </template>
@@ -62,6 +64,15 @@ html {
 .button--grey:hover {
   color: #fff;
   background-color: #35495e;
+}
+.container {
+  min-height: 83vh;
+  display: flex;
+  justify-content: center;
+  text-align: center;
+}
+li {
+   list-style-type: none;
 }
 </style>
 
