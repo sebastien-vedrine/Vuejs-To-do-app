@@ -67,7 +67,6 @@ html {
 }
 .container {
   min-height: 83vh;
-  display: flex;
   justify-content: center;
   text-align: center;
 }
