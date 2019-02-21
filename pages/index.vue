@@ -17,7 +17,7 @@
       <li v-for="(todo, index) in todos" :key=todo.id>
           <v-layout row wrap>
             <v-flex xs12 sm10 md10>
-              <v-checkbox :checked="todo.done" :class="todo.done" :label="todo.text" @change="toggle(todo)"></v-checkbox>
+              <v-checkbox :checked="todo.completed" :class="todo.completed" :label="todo.title" @change="toggle(todo)"></v-checkbox>
             </v-flex>
             <v-flex xs12 sm2 md2>
               <v-btn fab dark small color="red" @click="deleteToDo">
@@ -33,7 +33,9 @@
 </template>
 
 <script>
+import Vuex from 'vuex'
 import { mapMutations } from 'vuex'
+import { mapActions } from 'vuex'
 
 export default {
   data() {
@@ -41,19 +43,20 @@ export default {
       createText: ''
     }
   },
-  computed: {
-    todos () { return this.$store.state.todos.list }
+  computed: Vuex.mapState(['todos', 'loading']),
+  created() {
+    this.$store.dispatch('loadData')
   },
   methods: {
     addToDo (e) {
-      this.$store.commit('todos/add', this.createText)
+      this.$store.commit('add', this.createText)
       this.createText = ''
     },
     deleteToDo (e) {
-      this.$store.commit('todos/remove', 1)
+      this.$store.commit('remove', todos)
     },
     ...mapMutations({
-      toggle: 'todos/toggle'
+      toggle: 'toggle'
     })
   }
 }
