@@ -15,19 +15,22 @@
     <ul>
       <v-container fluid grid-list-sm>
       <li v-for="(todo, index) in todos" :key=todo.id>
-          <v-layout row wrap>
-            <v-flex xs12 sm10 md10>
-              <v-checkbox :checked="todo.completed" :class="todo.completed" :label="todo.title" @change="toggle(todo)"></v-checkbox>
-
-              <h6>{{todo.userId}}</h6>
-              <h6>{{todo.id}}</h6>
-            </v-flex>
-            <v-flex xs12 sm2 md2>
-              <v-btn fab dark small color="red" @click="deleteToDo(todo)">
-                <v-icon dark>delete</v-icon>
-              </v-btn>
-            </v-flex>
-          </v-layout>
+        <v-layout row wrap>
+          <v-flex xs12 sm8 md8>
+            <v-checkbox :checked="todo.completed" :class="todo.completed" :label="todo.title" @change="toggle(todo)"></v-checkbox>
+          </v-flex>
+          <v-flex xs4 sm2 md2>
+            ID: {{todo.id}} &nbsp; UserID: {{todo.userId}}
+          </v-flex>
+          <v-flex xs8 sm2 md2>
+            <v-btn fab dark small color="amber" :href="'/todo/'+todo.id">
+              <v-icon>fas fa-edit</v-icon>
+            </v-btn>
+            <v-btn fab dark small color="red" @click="deleteToDo(todo)">
+              <v-icon dark>delete</v-icon>
+            </v-btn>
+          </v-flex>
+        </v-layout>
         <v-divider v-if="index + 1 < todos.length" :key="`divider-${index}`"></v-divider>
       </li>
       </v-container>
@@ -38,7 +41,6 @@
 <script>
 import Vuex from 'vuex'
 import { mapMutations } from 'vuex'
-import { mapActions } from 'vuex'
 
 export default {
   data() {
@@ -46,7 +48,7 @@ export default {
       createText: ''
     }
   },
-  computed: Vuex.mapState(['todos', 'loading']),
+  computed: Vuex.mapState(['todos']),
   created() {
     this.$store.dispatch('loadData')
   },

@@ -7,6 +7,7 @@ const createStore = () => {
   return new Vuex.Store({
     state: {
       todos: [],
+      todo: {},
       cpt: ''
     },
     actions: {
@@ -14,6 +15,12 @@ const createStore = () => {
         axios.get(URL)
         .then((response) => {
           commit('updateToDos', response.data)
+        })
+      },
+      getToDo({commit}, id) {
+        axios.get(URL+'/'+id)
+        .then((response) => {
+          commit('GET_TODO', response.data)
         })
       },
       add({commit, state}, text) {
@@ -44,6 +51,12 @@ const createStore = () => {
         state.todos = todos
         state.cpt = todos.length
       },
+      GET_TODO(state, todoObject) {
+        state.todo.id = todoObject.id
+        state.todo.userId = todoObject.userId
+        state.todo.title = todoObject.title
+        state.todo.completed = todoObject.completed
+      },
       ADD_TODO (state, todoObject) {
         state.todos.push(todoObject)
         state.cpt++
@@ -51,8 +64,8 @@ const createStore = () => {
       REMOVE_TODO (state, todoObject) {
         state.todos.splice(state.todos.indexOf(todoObject), 1)
       },
-      toggle (state, { todo }) {
-        todo.done = !todo.done
+      toggle (state, todoObject) {
+        todoObject.completed = !todoObject.completed
       }
     }
   })

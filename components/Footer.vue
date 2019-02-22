@@ -14,6 +14,7 @@
         color="white"
         flat
         round
+        to="/"
       >
         {{ link }}
       </v-btn>
