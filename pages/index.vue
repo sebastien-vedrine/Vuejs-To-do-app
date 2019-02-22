@@ -4,10 +4,10 @@
     <br>
     <v-layout row wrap justify-center>
       <v-flex md6>
-        <v-text-field label="Add to do" v-model="createText" @keyup.enter="addTodo"></v-text-field>
+        <v-text-field label="Add to do" v-model="createText" @keyup.enter="addToDo(createText)"></v-text-field>
       </v-flex>
       <v-flex md2>
-        <v-btn fab dark small color="green" @click="addToDo">
+        <v-btn fab dark small color="green" @click="addToDo(createText)">
           <v-icon dark>add</v-icon>
         </v-btn>
       </v-flex>
@@ -18,9 +18,12 @@
           <v-layout row wrap>
             <v-flex xs12 sm10 md10>
               <v-checkbox :checked="todo.completed" :class="todo.completed" :label="todo.title" @change="toggle(todo)"></v-checkbox>
+
+              <h6>{{todo.userId}}</h6>
+              <h6>{{todo.id}}</h6>
             </v-flex>
             <v-flex xs12 sm2 md2>
-              <v-btn fab dark small color="red" @click="deleteToDo">
+              <v-btn fab dark small color="red" @click="deleteToDo(todo)">
                 <v-icon dark>delete</v-icon>
               </v-btn>
             </v-flex>
@@ -48,12 +51,12 @@ export default {
     this.$store.dispatch('loadData')
   },
   methods: {
-    addToDo (e) {
-      this.$store.commit('add', this.createText)
+    addToDo (text) {
+      this.$store.dispatch('add', text)
       this.createText = ''
     },
-    deleteToDo (e) {
-      this.$store.commit('remove', todos)
+    deleteToDo (todo) {
+      this.$store.dispatch('remove', todo)
     },
     ...mapMutations({
       toggle: 'toggle'

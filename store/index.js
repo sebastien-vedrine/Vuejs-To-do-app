@@ -7,35 +7,49 @@ const createStore = () => {
   return new Vuex.Store({
     state: {
       todos: [],
-      loading: true
+      cpt: ''
     },
     actions: {
       loadData({commit}) {
         axios.get(URL)
         .then((response) => {
           commit('updateToDos', response.data)
-          commit('changeLoadingState', false)
         })
       },
-      add({commit, text}) {
-        axios.post(URL, text)
+      add({commit, state}, text) {
+        if (text == '') {
+          // Do not add empty todos
+          return
+        }
+        const todo = {
+          userId: Math.floor(Math.random() * 10) + 1,
+          id: state.cpt+1,
+          title: text,
+          completed: false
+        }
+        axios.post(URL, {todo})
+        .then((response) => {
+          commit('ADD_TODO', todo)
+        })
+      },
+      remove({commit}, todo) {
+        axios.delete(URL+'/'+todo.id)
+        .then((response) => {
+          commit('REMOVE_TODO', todo)
+        })
       }
     },
     mutations: {
       updateToDos(state, todos) {
         state.todos = todos
+        state.cpt = todos.length
       },
-      changeLoadingState(state, loading) {
-        state.loading = loading
+      ADD_TODO (state, todoObject) {
+        state.todos.push(todoObject)
+        state.cpt++
       },
-      add (state, text) {
-        state.todos.push({
-          title: text,
-          completed: false
-        })
-      },
-      remove (state, { todo }) {
-        state.todos.splice(state.todos.indexOf(todo), 1)
+      REMOVE_TODO (state, todoObject) {
+        state.todos.splice(state.todos.indexOf(todoObject), 1)
       },
       toggle (state, { todo }) {
         todo.done = !todo.done
