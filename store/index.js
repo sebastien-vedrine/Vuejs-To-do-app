@@ -44,6 +44,13 @@ const createStore = () => {
         .then((response) => {
           commit('REMOVE_TODO', todo)
         })
+      },
+      update({commit}, todo) {
+        axios.put(URL+'/'+todo.id, todo)
+        .then((response) => {
+          commit('UPDATE_TODO', todo)
+          console.log(todo)
+        })
       }
     },
     mutations: {
@@ -63,6 +70,14 @@ const createStore = () => {
       },
       REMOVE_TODO (state, todoObject) {
         state.todos.splice(state.todos.indexOf(todoObject), 1)
+      },
+      UPDATE_TODO (state, todoObject) {
+        for(let i in state.todos) {
+          if(state.todos[i].id === todo.id) {
+            state.todos[i] = todo
+            break
+          }
+        }
       },
       toggle (state, todoObject) {
         todoObject.completed = !todoObject.completed
